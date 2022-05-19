@@ -94,7 +94,7 @@ int main(int argc, char* argv[]){
         MPI_Scatter(select.data(), sub_select_size, MPI_INT, sub_select, sub_select_size, MPI_INT, 0, MPI_COMM_WORLD);
         
         // auto start = chrono::high_resolution_clock::now();
-        #pragma omp parallel for schedule(dynamic)
+        #pragma omp parallel for schedule(dynamic) num_threads(17)
         for(int i = 0; i < sub_select_size; i++){
             int state = sub_select[i];
             if(checked_set[state]) continue;

@@ -25,21 +25,21 @@ int main(int argc, char* argv[]){
 
     start = chrono::high_resolution_clock::now();
     //model->update_posterior_probability(1, 1, dilution_matrix);
-    model->find_halving_state_openmp_static_scheduler(0.5);
+    cout << model->find_halving_state_openmp_static_scheduler(0.5) << endl;
     stop = chrono::high_resolution_clock::now();
     duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
     cout << "bha static: " << duration.count() << endl;
 
     start = chrono::high_resolution_clock::now();
     //model->update_posterior_probability(1, 1, dilution_matrix);
-    model->find_halving_state_openmp_dynamic_scheduler(0.5);
+    cout << model->find_halving_state_openmp_dynamic_scheduler(0.5) << endl;
     stop = chrono::high_resolution_clock::now();
     duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
     cout << "bha dynamic: " << duration.count() << endl;
 
     start = chrono::high_resolution_clock::now();
     //model->update_posterior_probability(1, 1, dilution_matrix);
-    model->find_halving_state(0.5);
+    cout << model->find_halving_state(0.5) << endl;
     stop = chrono::high_resolution_clock::now();
     duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
     cout << "bha single thread: " << duration.count() << endl;

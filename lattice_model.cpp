@@ -138,7 +138,6 @@ int lattice_model::find_halving_state(double prob){
 int lattice_model::find_halving_state_openmp_static_scheduler(double prob){
     int ret = 0, size = (1 << pool_size);
     double thres = 2.0;
-    double val, temp;
     std::vector<bool> checked_set(size);
     int* sophisticated_selection_table = sophisticated_selection();
 
@@ -146,7 +145,7 @@ int lattice_model::find_halving_state_openmp_static_scheduler(double prob){
     for(int i = 0; i < size; i++){
         int state = sophisticated_selection_table[i];
         if(checked_set[state]) continue;
-        val = get_up_set_mass(state);
+        double val = get_up_set_mass(state);
         if(val < prob){
             int* up_set = get_up_set(state);
             for(int j = 0; j < (1 << (pool_size-__builtin_popcount(state))); j++) checked_set[up_set[j]] = true;
@@ -157,10 +156,13 @@ int lattice_model::find_halving_state_openmp_static_scheduler(double prob){
             for(int j = 0; j < (1 << __builtin_popcount(state)); j++) checked_set[down_set[j]] = true;
             delete[] down_set;
         }
-        temp = abs(val - prob);
-        if(temp < thres){
-            thres = temp;
-            ret = state;
+        double temp = abs(val - prob);
+        #pragma omp critical
+        {
+            if(temp < thres){
+                thres = temp;
+                ret = state;
+            }
         }
     }
     return ret;
@@ -169,7 +171,6 @@ int lattice_model::find_halving_state_openmp_static_scheduler(double prob){
 int lattice_model::find_halving_state_openmp_dynamic_scheduler(double prob){
     int ret = 0, size = (1 << pool_size);
     double thres = 2.0;
-    double val, temp;
     std::vector<bool> checked_set(size);
     int* sophisticated_selection_table = sophisticated_selection();
 
@@ -177,7 +178,7 @@ int lattice_model::find_halving_state_openmp_dynamic_scheduler(double prob){
     for(int i = 0; i < size; i++){
         int state = sophisticated_selection_table[i];
         if(checked_set[state]) continue;
-        val = get_up_set_mass(state);
+        double val = get_up_set_mass(state);
         if(val < prob){
             int* up_set = get_up_set(state);
             for(int j = 0; j < (1 << (pool_size-__builtin_popcount(state))); j++) checked_set[up_set[j]] = true;
@@ -188,10 +189,13 @@ int lattice_model::find_halving_state_openmp_dynamic_scheduler(double prob){
             for(int j = 0; j < (1 << __builtin_popcount(state)); j++) checked_set[down_set[j]] = true;
             delete[] down_set;
         }
-        temp = abs(val - prob);
-        if(temp < thres){
-            thres = temp;
-            ret = state;
+        double temp = abs(val - prob);
+        #pragma omp critical
+        {
+            if(temp < thres){
+                thres = temp;
+                ret = state;
+            }
         }
     }
     return ret;
