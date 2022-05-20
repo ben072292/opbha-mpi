@@ -45,7 +45,7 @@ int main(int argc, char* argv[]){
     int name_len;
     MPI_Get_processor_name(processor_name, &name_len);
 
-    int pool_size = atoi(argv[1]);
+    int pool_size = atoi(argv[1])-3;
     double prior_val = atof(argv[2]);
     omp_set_num_threads(atoi(argv[3]));
     double* prior = new double[pool_size];
@@ -94,7 +94,7 @@ int main(int argc, char* argv[]){
         MPI_Scatter(select.data(), sub_select_size, MPI_INT, sub_select, sub_select_size, MPI_INT, 0, MPI_COMM_WORLD);
         
         // auto start = chrono::high_resolution_clock::now();
-        #pragma omp parallel for schedule(dynamic) num_threads(17)
+        #pragma omp parallel for schedule(dynamic)
         for(int i = 0; i < sub_select_size; i++){
             int state = sub_select[i];
             if(checked_set[state]) continue;
