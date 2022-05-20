@@ -46,10 +46,21 @@ int main(int argc, char* argv[]){
     MPI_Get_processor_name(processor_name, &name_len);
 
     int pool_size = atoi(argv[1])-3;
-    double prior_val = atof(argv[2]);
-    omp_set_num_threads(atoi(argv[3]));
     double* prior = new double[pool_size];
-    for(int i = 0; i < pool_size; i++) prior[i] = prior_val;
+    if(argv[1][0] == '1'){
+        for(int i = 0; i < pool_size; i++) prior[i] = 0.02;
+        prior[0] = 0.2;
+    } 
+    else if(argv[1][0] == '2'){
+        for(int i = 0; i < pool_size; i++) prior[i] = 0.02;
+        prior[0] = 0.2;
+        prior[1] = 0.2;
+    }
+    else{
+        double prior_val = atof(argv[2]);
+        for(int i = 0; i < pool_size; i++) prior[i] = prior_val;
+    }
+    omp_set_num_threads(atoi(argv[3]));
     pool_stat* pool = new pool_stat(pool_size, prior);
     lattice_model* model;
 
