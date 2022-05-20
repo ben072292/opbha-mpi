@@ -45,7 +45,7 @@ int main(int argc, char* argv[]){
     int name_len;
     MPI_Get_processor_name(processor_name, &name_len);
 
-    int pool_size = atoi(argv[1])-3;
+    int pool_size = atoi(argv[1])-2;
     double* prior = new double[pool_size];
     if(argv[1][0] == '1'){
         for(int i = 0; i < pool_size; i++) prior[i] = 0.02;
