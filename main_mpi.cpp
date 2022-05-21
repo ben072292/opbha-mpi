@@ -78,7 +78,7 @@ int main(int argc, char* argv[]){
     run_time -= MPI_Wtime();
     MPI_Bcast(model->get_posterior_probability_map(), (1 << pool_size), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-    int select_size = (1 << (pool_size-6)); // 1/64
+    int select_size = (1 << (pool_size-7)); // 1/64
     int* sophsticated_table;
     bool* checked_set = (bool*)malloc(sizeof(bool) * (1 << pool_size));
     vector<int> select;
